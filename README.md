@@ -9,6 +9,12 @@
 
 "Niewątpliwie nasza wyszukiwarka ofert jest najlepsza w branży, jednakże jakiś czas temu okazało się, że nowo dodane oferty są słabo pozycjonowane przez silnik wyszukujący. Czy da się coś z tym zrobić?"
 
+### Koncepcja rozwiązania
+
+* Zadanie regresji
+* Skoro wyszukiwarka działa dobrze dla ofert, które mają jakieś oceny, to spróbujmy przewidzieć oceny tam gdzie ich brakuje
+* Model regresji, gdzie celem jest średnia ocena
+
 ### Kontekst
 
 W ramach projektu wcielamy się w rolę analityka pracującego dla portalu Nocarz - serwisu, w
