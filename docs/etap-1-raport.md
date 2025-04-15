@@ -211,3 +211,23 @@ mają nieprzydatny format itd.
   * nie będzie dostępny dla nowych ofert
 * `reviews_per_month`
   * nie będzie dostępny dla nowych ofert
+
+
+#### Atrybuty tekstowe
+
+Atrybuty nieprzydatne w takiej postaci, ale można by je przetworzyć przez LLM i uzyskać zanurzenia
+
+* `name`
+  * można by wyciągnąć informację o typie oferty, ale na to już jest atrybut
+* `description`
+  * potencjalnie bardzo przydatne
+  * można by utworzyć zanurzenie jakimś zewnętrznym modelem
+  * 185 braków
+* `neighborhood_overview`
+  * ~50% braków
+* `host_about`
+  * ~50% braków
+  * wątpliwe czy w ogóle zawiera przydatne informacje
+* `license`
+  * ~40% braków
+  * wątpliwe czy w ogóle zawiera przydatne informacje
