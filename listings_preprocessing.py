@@ -16,6 +16,7 @@ def drop_useless_columns(df):
         "last_scraped",
         "source",
         "picture_url",
+        "host_id",
         "host_name",
         "host_url",
         "host_thumbnail_url",
