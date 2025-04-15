@@ -41,11 +41,20 @@ oferty są słabo pozycjonowane przez silnik wyszukujący. Czy da się coś z ty
     * `review_scores_value`
 * Predykcję oceny możemy przemnożyć przez wagę $\in (0, 1]$ żeby oferty o rzeczywistej średniej ocenie jednakowej
   wartości były lepiej pozycjonowane
+* Model bazowy
+    * losowy model bazowy - przewidujemy średnią ocenę jako losową wartość z rozkładu normalnego
+    * rozkład normalny z parametrami:
+        * $\mu = 4.77$
+        * $\sigma = 0.27$
 
 ### Biznesowe kryteria sukcesu
 
 * Wzrost liczby wyświetleń ofert bez dodanych opinii do poziomu $\ge 50\%$ średniej liczby wyświetleń ofert z dodanymi
   opiniami
+
+### Analityczne kryteria sukcesu
+
+* Błąd średniokwadratowy $MSE$ na zbiorze testowym 5? razy mniejszy niż dla losowego modelu bazowego
 
 ## Analiza danych
 
