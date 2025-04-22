@@ -1,4 +1,5 @@
 from datetime import datetime
+from sklearn.preprocessing import StandardScaler
 
 import numpy as np
 import pandas as pd
@@ -248,6 +249,40 @@ def transform_percentage_to_number(df):
     return df
 
 
+def normalize_numerical_columns(df):
+    """Standardize numerical columns to have mean 0 and std 1"""
+
+    numerical_columns = [
+        "maximum_nights",
+        "minimum_minimum_nights",
+        "maximum_minimum_nights",
+        "minimum_maximum_nights",
+        "maximum_maximum_nights",
+        "minimum_nights_avg_ntm",
+        "maximum_nights_avg_ntm",
+        "availability_30",
+        "availability_60",
+        "availability_90",
+        "availability_365",
+        "number_of_reviews",
+        "number_of_reviews_ltm",
+        "number_of_reviews_l30d",
+        "calculated_host_listings_count",
+        "calculated_host_listings_count_entire_homes",
+        "calculated_host_listings_count_private_rooms",
+        "calculated_host_listings_count_shared_rooms",
+        "price",
+        "avg_rating",
+        "avg_rating_by_host",
+    ]
+    scaler = StandardScaler()
+
+    for c in numerical_columns:
+        df[c] = scaler.fit_transform(df[[c]])
+
+    return df
+
+
 def transform_listings(df):
     df = drop_useless_columns(df)
     df = drop_fulltext_columns(df)
@@ -265,6 +300,7 @@ def transform_listings(df):
     df = one_hot_encode_list_column(df, "host_verifications")
     df = add_average_rating_by_host(df)
     df = df.drop(columns=["host_id"])  # after adding avg_rating_by_host
+    df = normalize_numerical_columns(df)
     return df
 
 
