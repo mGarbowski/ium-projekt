@@ -1,7 +1,7 @@
 # Etap 1 - raport
 
 * Definicja problemu biznesowego, zdefiniowanie zadania/zadań modelowania i wszystkich założeń, zaproponowania kryteriów
-  sukcesu)
+  sukcesu
 * Analiza danych z perspektywy realizacji tych zadań (trzeba ocenić, czy dostarczone dane są wystarczające – może czegoś
   brakuje, może coś trzeba poprawić, domagać się innych danych, ...)
 
@@ -178,6 +178,7 @@ mają nieprzydatny format itd.
     * w zbiorze nie ma przykładów z brakującym obrazkiem
 * `host_id`
     * nie niesie informacji o jakości
+    * odrzucane po wyciągnięciu średniej oceny dla hosta
 * `host_url`
     * nie niesie informacji o jakości
 * `host_name`
@@ -324,12 +325,33 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
     * zamieniamy wszystkie na liczbę
     * wydaje się bardzo istotny a ma 36% brakujących wartości (tam, gdzie nie brakuje oceny - nasz zbiór treningowy)
 
+#### Dodatkowe atrybuty
+
+* Średnia pozostałych ogłoszeń użytkownika (`avg_rating_by_host`)
+
 #### Nieruszone atrybuty
 
 * Atrybuty liczbowe, możemy je wykorzystać bezpośrednio w modelu
-* TODO lista - wszystkie / te wymienione później
+    * `maximum_nights`
+    * `minimum_minimum_nights`
+    * `maximum_minimum_nights`
+    * `minimum_maximum_nights`
+    * `maximum_maximum_nights`
+    * `minimum_nights_avg_ntm`
+    * `maximum_nights_avg_ntm`
+    * `availability_30`
+    * `availability_60`
+    * `availability_90`
+    * `availability_365`
+    * `number_of_reviews`
+    * `number_of_reviews_ltm`
+    * `number_of_reviews_l30d`
+    * `calculated_host_listings_count`
+    * `calculated_host_listings_count_entire_homes`
+    * `calculated_host_listings_count_private_rooms`
+    * `calculated_host_listings_count_shared_rooms`
+
 * TODO Musimy dokonać selekcji, mogłem przeoczyć jakieś, które są liczbowe, a nie mają sensu
-* TODO analiza korelacji ze średnią oceną
 
 #### Brakujące wartości atrybutów
 
@@ -337,9 +359,9 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 * W wierszach gdzie średnia ocena jest znana - na tym zbiorze możemy trenować model.
 * Kolumny, w których mamy braki wydają się bardzo istotne dla jakości oferty - to może być problem przy modelowaniu.
 * Mamy za mało danych i braków jest zbyt dużo, żeby odrzucać wiersze z brakami atrybutów
-  * rozważamy uzupełnienie braków pomocniczym modelem regresji obsługującym brakujące wartości (np. las losowy)
+    * rozważamy uzupełnienie braków pomocniczym modelem regresji obsługującym brakujące wartości (np. las losowy)
 * Brak `price`, `beds`, `bathrooms` występuje jednocześnie
-  * jest mocno skorelowany z brakami w reszcie atrybutów
+    * jest mocno skorelowany z brakami w reszcie atrybutów
 
 | Atrybut              | % brakujących wartości |
 |----------------------|------------------------|
@@ -350,3 +372,34 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 | host_response_rate   | 0.35                   |
 | host_acceptance_rate | 0.27                   |
 | bedrooms             | 0.14                   |
+
+#### Korelacja atrybutów liczbowych i średniej opinii
+
+| Atrybut                                          | Współczynnik korelacji |
+|--------------------------------------------------|------------------------|
+| **avg_rating_by_host**                           | 0.812079               |
+| **calculated_host_listings_count**               | -0.254694              |
+| **calculated_host_listings_count_entire_homes**  | -0.242170              |
+| **maximum_minimum_nights**                       | -0.164190              |
+| **calculated_host_listings_count_private_rooms** | -0.143124              |
+| **availability_365**                             | -0.139259              |
+| **availability_30**                              | -0.114143              |
+| **availability_60**                              | -0.110936              |
+| **availability_90**                              | -0.108025              |
+| minimum_minimum_nights                           | -0.087439              |
+| maximum_nights                                   | -0.086410              |
+| maximum_maximum_nights                           | -0.083740              |
+| minimum_nights_avg_ntm                           | -0.080875              |
+| maximum_nights_avg_ntm                           | -0.075058              |
+| minimum_maximum_nights                           | -0.061483              |
+| number_of_reviews_l30d                           | 0.056563               |
+| number_of_reviews_ltm                            | 0.055173               |
+| number_of_reviews                                | 0.041431               |
+| price                                            | 0.036055               |
+| calculated_host_listings_count_shared_rooms      | -0.034583              |
+
+##### Wnioski
+
+* `avg_rating_by_host` jest świetnym przybliżeniem etykiety, dostępne niestety tylko dla 20% wierszy, dla których
+nie mamy informacji o ocenie
+* kilka ciekawych atrybutów z korelacją powyżej 10%
