@@ -398,8 +398,38 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 | price                                            | 0.036055               |
 | calculated_host_listings_count_shared_rooms      | -0.034583              |
 
+#### Współczynnik informacji wzajemnej między atrybutami liczbowymi i średnią opinią
+
+| Atrybut                                      | Wsp. informacji wzajemnej |
+|----------------------------------------------|---------------------------|
+| avg_rating_by_host                           | 3.226074                  |
+| number_of_reviews                            | 0.475701                  |
+| number_of_reviews_ltm                        | 0.190932                  |
+| maximum_nights                               | 0.082074                  |
+| calculated_host_listings_count_entire_homes  | 0.080205                  |
+| calculated_host_listings_count               | 0.071988                  |
+| availability_365                             | 0.067038                  |
+| maximum_nights_avg_ntm                       | 0.065238                  |
+| maximum_maximum_nights                       | 0.058819                  |
+| minimum_nights_avg_ntm                       | 0.055982                  |
+| minimum_maximum_nights                       | 0.048532                  |
+| minimum_minimum_nights                       | 0.044014                  |
+| availability_30                              | 0.042572                  |
+| number_of_reviews_l30d                       | 0.042106                  |
+| availability_60                              | 0.041981                  |
+| calculated_host_listings_count_private_rooms | 0.036400                  |
+| calculated_host_listings_count_shared_rooms  | 0.030120                  |
+| availability_90                              | 0.022099                  |
+| price                                        | 0.013473                  |
+| maximum_minimum_nights                       | 0.000000                  |
+
 ##### Wnioski
 
 * `avg_rating_by_host` jest świetnym przybliżeniem etykiety, dostępne niestety tylko dla 20% wierszy, dla których
-nie mamy informacji o ocenie
-* kilka ciekawych atrybutów z korelacją powyżej 10%
+  nie mamy informacji o ocenie
+* Dużo informacji o średniej ocenie niesie liczba recenzji, która niestety niezerowa jest w tym samym przypadku,
+  co `avg_rating_by_host`
+* Korelacja liniowa wydaje się być nienajgorsza dla kilku atrybutów, jednak współczynnik informacji wzajemnej jest
+  znacznie niższy
+* Nie mamy zaskakująco dobrych atrybutów poza sztucznie utworzonym, potencjalnie ew.
+  `calculated_host_listings_count_entire_homes`
