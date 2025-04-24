@@ -221,6 +221,12 @@ mają nieprzydatny format itd.
     * braki we wszystkich wierszach
 * `calendar_last_scraped`
     * związane z procesem zbierania danych
+* `number_of_reviews`
+  * będzie 0 dla nowych ofert
+* `number_of_reviews_ltm`
+  * będzie 0 dla nowych ofert
+* `number_of_reviews_l30d`
+  * będzie 0 dla nowych ofert
 * `first_review`
     * nie będzie dostępny dla nowych ofert
 * `last_review`
@@ -343,9 +349,6 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
     * `availability_60`
     * `availability_90`
     * `availability_365`
-    * `number_of_reviews`
-    * `number_of_reviews_ltm`
-    * `number_of_reviews_l30d`
     * `calculated_host_listings_count`
     * `calculated_host_listings_count_entire_homes`
     * `calculated_host_listings_count_private_rooms`

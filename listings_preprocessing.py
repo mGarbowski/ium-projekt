@@ -26,6 +26,9 @@ def drop_useless_columns(df):
         "host_location",
         "host_neighbourhood",
         "neighbourhood_cleansed",
+        "number_of_reviews",
+        "number_of_reviews_ltm",
+        "number_of_reviews_l30d",
         "first_review",  # will not be present in new offers
         "last_review",  # will not be present in new offers
         "latitude",  # neighbourhood category should be more informative
@@ -264,9 +267,6 @@ def normalize_numerical_columns(df):
         "availability_60",
         "availability_90",
         "availability_365",
-        "number_of_reviews",
-        "number_of_reviews_ltm",
-        "number_of_reviews_l30d",
         "calculated_host_listings_count",
         "calculated_host_listings_count_entire_homes",
         "calculated_host_listings_count_private_rooms",
