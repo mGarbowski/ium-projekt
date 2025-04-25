@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from sklearn.preprocessing import StandardScaler
 
@@ -202,6 +203,21 @@ def group_property_types(df):
     return df
 
 
+def extract_num_bathrooms(df):
+    def parse_bathroom(text):
+        text = str(text).lower()
+        match = re.search(r"(\d+\.?\d*)", text)
+        if match:
+            return float(match.group(1))
+        elif "half" in text:
+            return 0.5
+        else:
+            return None
+
+    df["num_bathrooms"] = df["bathrooms_text"].apply(parse_bathroom)
+    return df
+
+
 def extract_is_shared_from_bathrooms_text(df):
     """Extract is_shared from bathrooms_text column"""
     extract_is_shared = lambda txt: 1 if "shared" in txt.lower() else 0
@@ -290,6 +306,7 @@ def transform_listings(df):
     df = aggregate_rating_columns(df)
     df = transform_price(df)
     df = transform_host_response_time(df)
+    df = extract_num_bathrooms(df)
     df = extract_is_shared_from_bathrooms_text(df)
     df = group_property_types(df)
     df = categorical_columns_one_hot_encoding(

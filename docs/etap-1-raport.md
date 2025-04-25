@@ -314,7 +314,7 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 * `bathrooms_text`
     * liczba i tekst
     * liczba łazienek, ale czemu są ułamkowe? (np. 1.5)
-    * można wyciągnąć liczbę jako oddzielny atrybut TODO
+    * można wyciągnąć liczbę jako oddzielny atrybut
     * można z tekstu wyciągnąć czy łazienka jest dzielona (atrybut binarny) - wydaje się istotne
 
 #### Inne atrybuty wymagające przekształcenia
@@ -334,6 +334,7 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 #### Dodatkowe atrybuty
 
 * Średnia pozostałych ogłoszeń użytkownika (`avg_rating_by_host`)
+* Liczba łazienek wyciągnięta z `bathrooms_text` (`num_bathrooms`)
 
 #### Nieruszone atrybuty
 
@@ -354,7 +355,6 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
     * `calculated_host_listings_count_private_rooms`
     * `calculated_host_listings_count_shared_rooms`
 
-* TODO Musimy dokonać selekcji, mogłem przeoczyć jakieś, które są liczbowe, a nie mają sensu
 
 #### Brakujące wartości atrybutów
 
@@ -400,6 +400,7 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 | number_of_reviews                                | 0.041431               |
 | price                                            | 0.036055               |
 | calculated_host_listings_count_shared_rooms      | -0.034583              |
+| num_bathrooms                       | 0.023604                  |
 
 #### Współczynnik informacji wzajemnej między atrybutami liczbowymi i średnią opinią
 
@@ -425,6 +426,7 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
 | availability_90                              | 0.022099                  |
 | price                                        | 0.013473                  |
 | maximum_minimum_nights                       | 0.000000                  |
+| num_bathrooms                       | 0.000000                  |
 
 ##### Wnioski
 
