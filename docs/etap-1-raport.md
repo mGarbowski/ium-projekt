@@ -278,8 +278,8 @@ Wartości `t`/`f` zamieniamy na 0/1
     * `review_scores_value`
 * Brak w 23% wierszy
 * Rozkład normalny
-    * średnia $\mu = 4.77$
-    * odchylenie $\sigma = 0.27$
+    * średnia $\mu = 4.76$
+    * odchylenie $\sigma = 0.29$
     * obcięty w $5.0$
     * możemy wykorzystać rozkład tworząc losowy model bazowy
 
@@ -438,3 +438,75 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
   znacznie niższy
 * Nie mamy zaskakująco dobrych atrybutów poza sztucznie utworzonym, potencjalnie ew.
   `calculated_host_listings_count_entire_homes`
+
+
+#### Format danych wejściowych do modelu
+
+Kolumny zestawu po wszystkich transformacjach:
+* 'host_since'
+* 'host_response_time'
+* 'host_response_rate'
+* 'host_acceptance_rate'
+* 'host_is_superhost'
+* 'host_listings_count'
+* 'host_total_listings_count'
+* 'host_has_profile_pic'
+* 'host_identity_verified'
+* 'accommodates'
+* 'bathrooms'
+* 'bedrooms'
+* 'beds'
+* 'price'
+* 'minimum_nights'
+* 'maximum_nights'
+* 'minimum_minimum_nights'
+* 'maximum_minimum_nights'
+* 'minimum_maximum_nights'
+* 'maximum_maximum_nights'
+* 'minimum_nights_avg_ntm'
+* 'maximum_nights_avg_ntm'
+* 'has_availability'
+* 'availability_30'
+* 'availability_60'
+* 'availability_90'
+* 'availability_365'
+* 'instant_bookable'
+* 'calculated_host_listings_count'
+* 'calculated_host_listings_count_entire_homes'
+* 'calculated_host_listings_count_private_rooms'
+* 'calculated_host_listings_count_shared_rooms'
+* 'avg_rating'
+* 'num_bathrooms'
+* 'neighbourhood_group_cleansed_Friedrichshain-Kreuzberg'
+* 'neighbourhood_group_cleansed_Lichtenberg'
+* 'neighbourhood_group_cleansed_Marzahn - Hellersdorf'
+* 'neighbourhood_group_cleansed_Mitte'
+* 'neighbourhood_group_cleansed_Neukölln'
+* 'neighbourhood_group_cleansed_Pankow'
+* 'neighbourhood_group_cleansed_Reinickendorf'
+* 'neighbourhood_group_cleansed_Spandau'
+* 'neighbourhood_group_cleansed_Steglitz - Zehlendorf'
+* 'neighbourhood_group_cleansed_Tempelhof - Schöneberg'
+* 'neighbourhood_group_cleansed_Treptow - Köpenick'
+* 'property_type_condo'
+* 'property_type_entire rental unit'
+* 'property_type_home'
+* 'property_type_other'
+* 'property_type_room'
+* 'room_type_Hotel room'
+* 'room_type_Private room'
+* 'room_type_Shared room'
+* 'is_shared_bathroom_1.0'
+* 'host_verifications_'
+* 'host_verifications_email'
+* 'host_verifications_phone'
+* 'host_verifications_work_email'
+* 'avg_rating_by_host'
+
+#### Analiza rozkładów prawdopodobieństwa atrybutów
+TODO
+
+
+#### Wynik prostego modelu bazowego na zestawie danych, porównanie z modelem losowym
+
+TODO
