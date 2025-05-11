@@ -11,8 +11,8 @@ from fastapi import FastAPI
 from scipy.stats import truncnorm
 from sklearn.linear_model import LinearRegression
 
-from listings_preprocessing import transform_item
-from schema import PredictRequest, Listing
+from src.listings_preprocessing import transform_item
+from src.schema import PredictRequest, Listing
 
 SCALER_FILE = 'models/scaler.pkl'
 LR_MODEL_FILE = 'models/linear_regression.pkl'

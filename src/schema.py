@@ -46,7 +46,7 @@ class Listing(BaseModel):  # TODO remove or make optional unused fields
     bedrooms: Number
     beds: Number
     amenities: str
-    price: str | Number
+    price: Union[str, Number]
     minimum_nights: Number
     maximum_nights: Number
     minimum_minimum_nights: Number
