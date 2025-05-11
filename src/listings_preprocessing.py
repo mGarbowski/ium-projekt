@@ -408,7 +408,6 @@ def transform_item(df, scaler_file):
     df = transform_host_since(df)
     df = transform_percentage_to_number(df)
     df = transform_host_verifications(df)
-    # ...
     df = df.drop(columns=["host_id"])
     df = df.sort_index(axis=1)
     df = normalize_numerical_columns(df, scaler_file, load=True)
