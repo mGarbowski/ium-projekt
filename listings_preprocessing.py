@@ -272,7 +272,7 @@ def normalize_numerical_columns(df):
         "calculated_host_listings_count_private_rooms",
         "calculated_host_listings_count_shared_rooms",
         "price",
-        "avg_rating",
+        # "avg_rating",
         "avg_rating_by_host",
     ]
     scaler = StandardScaler()
