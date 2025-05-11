@@ -39,3 +39,36 @@ to (analitycy mogą wnioskować o dostęp do tych informacji na potrzeby realiza
 * Etap 1 2025.04.25
 * Etap 2 2025.05.23
 * [Opis](./docs/Projekt_IUM25L.pdf)
+
+
+## Uruchomienie i instalacja
+
+Instalacja bibliotek i wirtualnego środowiska:
+
+```bash
+pdm install --dev
+```
+
+Uruchomienie aplikacji w trybie deweloperskim:
+
+```bash
+pdm run dev
+```
+
+Uruchomienie aplikacji w kontenerze Docker:
+
+```bash
+docker compose up --build -d
+```
+
+Zapisanie logów do pliku:
+
+```bash
+docker compose logs > data/service.log
+```
+
+Uruchomienie testów:
+
+```bash
+pdm run test
+```
