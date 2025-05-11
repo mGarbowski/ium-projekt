@@ -5,3 +5,4 @@ data
 models
 pyrightconfig.json
 **/__pycache__/
+.pdm-python
