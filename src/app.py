@@ -10,8 +10,10 @@ from src.model.random import RandomPredictionModel
 from src.prediction_service import PredictionService
 from src.schema import PredictRequest
 
-SCALER_FILE = 'models/scaler.pkl'
-LR_MODEL_FILE = 'models/linear_regression.pkl'
+import os
+
+SCALER_FILE = os.environ['SCALER_FILE'] if 'SCALER_FILE' in os.environ else 'models/scaler.pkl'
+LR_MODEL_FILE = os.environ['LR_MODEL_FILE'] if 'LR_MODEL_FILE' in os.environ else 'models/linear_regression.pkl'
 
 logging.basicConfig(
     level=logging.INFO,
