@@ -1,9 +1,79 @@
-### Example request to the prediction endpoint
+### Example request to the prediction endpoint - random variant
 POST http://localhost:8000/predict/
 Content-Type: application/json
 
 {
     "user_id": "617d32dc-5c87-4ac6-a89d-b991624c529b",
+    "data": {
+        "id": "1047164111839138424",
+        "listing_url": "https://www.nocarz.pl/rooms/1047164111839138424",
+        "scrape_id": "20241221052002",
+        "last_scraped": "2024-12-21",
+        "source": "city scrape",
+        "name": "Privatzimmer in Neuk\u00f6lln/Rixdorf (Erdgescho\u00df)",
+        "description": "Hey dear guests, <br /><br />the room has a bed (160x200 cm) and everything else you need for a short stay.<br /><br />Subway (U7) Karl-Marx-Str. only 3 min walk.<br /><br />The apartment is hard of hearing and it could get noisy in the evening and morning. But at night it is quiet and good for sleeping.<br /><br />!!! NO kitchen for shared use !!! Kettle, coffee, tea, sugar, milk are available in the room.<br /><br />!!! NO SMOKING and NO VAPING !!! <br /><br />Smoking is only possible outside in the backyard.",
+        "neighborhood_overview": "",
+        "picture_url": "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTA0NzE2NDExMTgzOTEzODQyNA%3D%3D/original/47f64c5a-245a-4599-af76-b7ec9ed9ce4b.jpeg",
+        "host_id": "541377699",
+        "host_url": "https://www.nocarz.pl/users/show/541377699",
+        "host_name": "Annett",
+        "host_since": "2023-10-11",
+        "host_location": "Berlin, Germany",
+        "host_about": "",
+        "host_response_time": "within an hour",
+        "host_response_rate": "100%",
+        "host_acceptance_rate": "100%",
+        "host_is_superhost": "t",
+        "host_thumbnail_url": "https://a0.muscache.com/im/pictures/user/User/original/0272bfe5-a18d-4a80-a203-7e0fc21cfeaa.jpeg?aki_policy=profile_small",
+        "host_picture_url": "https://a0.muscache.com/im/pictures/user/User/original/0272bfe5-a18d-4a80-a203-7e0fc21cfeaa.jpeg?aki_policy=profile_x_medium",
+        "host_neighbourhood": "",
+        "host_listings_count": 1,
+        "host_total_listings_count": 1,
+        "host_verifications": "['email', 'phone']",
+        "host_has_profile_pic": "t",
+        "host_identity_verified": "t",
+        "neighbourhood": "",
+        "neighbourhood_cleansed": "Rixdorf",
+        "neighbourhood_group_cleansed": "Neuk\u00f6lln",
+        "latitude": "52.47817565281676",
+        "longitude": "13.439463980950931",
+        "property_type": "Private room in rental unit",
+        "room_type": "Private room",
+        "accommodates": 2,
+        "bathrooms": 1.0,
+        "bathrooms_text": "1 shared bath",
+        "bedrooms": 1,
+        "beds": 1,
+        "amenities": "[\"Coffee\", \"Room-darkening shades\", \"Shampoo\", \"Bed linens\", \"Smoke alarm\", \"Paid washer \\u2013 In unit\", \"Dishes and silverware\", \"Laser tag\", \"Outdoor playground\", \"Hot water kettle\", \"Long term stays allowed\", \"Hair dryer\", \"Laundromat nearby\", \"Portable heater\", \"Children\\u2019s books and toys for ages 0-2 years old, 2-5 years old, 5-10 years old, and 10+ years old\", \"Hot water\", \"Central heating\", \"Shared backyard \\u2013 Fully fenced\", \"Drying rack for clothing\", \"Clothing storage: wardrobe\", \"Books and reading material\", \"Dining table\", \"Luggage dropoff allowed\", \"Shower gel\", \"Hangers\", \"Body soap\", \"Dedicated workspace\", \"Host greets you\", \"Lock on bedroom door\", \"Essentials\", \"Bathtub\", \"Cleaning products\", \"Wifi\", \"Iron\", \"Free street parking\"]",
+        "price": "$40.00",
+        "minimum_nights": 1,
+        "maximum_nights": 30,
+        "minimum_minimum_nights": 1,
+        "maximum_minimum_nights": 1,
+        "minimum_maximum_nights": 1125,
+        "maximum_maximum_nights": 1125,
+        "minimum_nights_avg_ntm": 1.0,
+        "maximum_nights_avg_ntm": 1125.0,
+        "has_availability": "t",
+        "availability_30": 23,
+        "availability_60": 50,
+        "availability_90": 78,
+        "availability_365": 78,
+        "license": "08/Z/AZ/014226-24",
+        "instant_bookable": "t",
+        "calculated_host_listings_count": 1,
+        "calculated_host_listings_count_entire_homes": 0,
+        "calculated_host_listings_count_private_rooms": 1,
+        "calculated_host_listings_count_shared_rooms": 0
+    }
+}
+
+### Example request to the prediction endpoint - actual model variant
+POST http://localhost:8000/predict/
+Content-Type: application/json
+
+{
+    "user_id": "617d32dc-5c87-4ac6-a89d-b991624c529e",
     "data": {
         "id": "1047164111839138424",
         "listing_url": "https://www.nocarz.pl/rooms/1047164111839138424",
