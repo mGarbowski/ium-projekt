@@ -1,14 +1,15 @@
+import pickle
 from datetime import datetime
-from sklearn.preprocessing import StandardScaler
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
 LISTINGS_FILE = "data/raw/listings.csv"
 PROCESSED_LISTINGS_FILE = "data/processed/listings.csv"
+SCALER_FILE = "models/scaler.pkl"
 
-
-def drop_useless_columns(df):
+def drop_useless_columns(df, debug=True):
     cols_to_drop = [
         "id",
         "listing_url",
@@ -38,10 +39,12 @@ def drop_useless_columns(df):
         "reviews_per_month",  # will be missing for new offers
     ]
 
+    if not debug:
+        return df.drop(columns=cols_to_drop, errors="ignore")
     return df.drop(columns=cols_to_drop)
 
 
-def drop_fulltext_columns(df):
+def drop_fulltext_columns(df, debug=True):
     """Text columns that are useless but could be processed with an LLM(?)"""
     text_columns = [
         "name",
@@ -51,10 +54,13 @@ def drop_fulltext_columns(df):
         "license",
     ]
 
+    if not debug:
+        return df.drop(columns=text_columns, errors="ignore")
+
     return df.drop(columns=text_columns)
 
 
-def transform_binary_columns(df):
+def transform_binary_columns(df, debug=True):
     """To standard 0/1"""
     binary_columns = [
         "host_is_superhost",
@@ -65,9 +71,10 @@ def transform_binary_columns(df):
     ]
 
     for c in binary_columns:
-        unique_vals = df[c].unique()
-        assert len(unique_vals) == 2 or len(unique_vals) == 3
-        assert "t" in unique_vals and "f" in unique_vals
+        if debug:
+            unique_vals = df[c].unique()
+            assert len(unique_vals) == 2 or len(unique_vals) == 3
+            assert "t" in unique_vals and "f" in unique_vals
 
         df[c] = df[c].apply(lambda x: 1 if x == "t" else 0)
 
@@ -142,6 +149,20 @@ def one_hot_encode_list_column(df, column_name):
     df.drop(columns=[column_name], inplace=True)
     return df
 
+def transform_host_verifications(df):
+    """Explicit instead of one_hot_encode_list_column"""
+    col_name = "host_verifications"
+    expected_values = ['', 'email', 'phone', 'work_email']
+    row_values = attribute_value_to_list(df[col_name])
+    for row_value in row_values:
+        assert row_value in expected_values, f"Unexpected value {row_value} in column {col_name}"
+
+    for expected_value in expected_values:
+        df[f"{col_name}_{expected_value}"] = expected_value in row_values
+
+    df = df.drop(columns=[col_name])
+    return df
+
 
 def extract_host_country(df):
     """Extract host country from host_location"""
@@ -212,17 +233,69 @@ def extract_is_shared_from_bathrooms_text(df):
     return df
 
 
-def categorical_columns_one_hot_encoding(df):
+def categorical_columns_one_hot_encoding(df, debug=True):
     """One-hot encode categorical columns"""
-    categorical_columns = [
-        "neighbourhood_group_cleansed",
-        "property_type",
-        "room_type",
-        "is_shared_bathroom",
-    ]
+    categorical_columns = {
+        "neighbourhood_group_cleansed": [
+            'Neukölln',
+            'Pankow',
+            'Tempelhof - Schöneberg',
+            'Mitte',
+            'Friedrichshain-Kreuzberg',
+            'Treptow - Köpenick',
+            'Lichtenberg',
+            'Reinickendorf',
+            'Charlottenburg-Wilm.',
+            'Steglitz - Zehlendorf',
+            'Marzahn - Hellersdorf',
+            'Spandau'
+        ],
+        "property_type": [
+            "entire rental unit",
+            "room",
+            "condo",
+            "other",
+            "apartment",
+            "home",
+        ],
+        "room_type": [
+            "Entire home/apt",
+            "Private room",
+            "Hotel room",
+            "Shared room",
+        ],
+        "is_shared_bathroom": [1.0, 0.0, np.nan],
+    }
 
-    df = pd.get_dummies(df, columns=categorical_columns, drop_first=True)
-    return df
+    if debug:
+        for column, values in categorical_columns.items():
+            unique_vals = df[column].unique()
+            # Filter out NaN values for comparison
+            unique_vals_without_nan = [val for val in unique_vals if not pd.isna(val)]
+            expected_values_without_nan = [val for val in values if not pd.isna(val)]
+
+            assert len(unique_vals_without_nan) == len(expected_values_without_nan), \
+                f"Column {column} has {len(unique_vals_without_nan)} unique values, expected {len(expected_values_without_nan)}"
+            assert set(unique_vals_without_nan) == set(expected_values_without_nan), \
+                f"Actual: {unique_vals_without_nan}, expected: {expected_values_without_nan}"
+
+            # Check if NaN exists in both actual and expected values
+            assert (pd.isna(unique_vals).any() == pd.isna(values).any()), \
+                f"NaN presence mismatch in column {column}"
+
+            if pd.isna(values).any():
+                df[column] = df[column].fillna("nan")  # ensure a separate column gets created for NaN values
+
+        df = pd.get_dummies(df, columns=list(categorical_columns.keys()))
+        return df
+    else:
+        for column, values in categorical_columns.items():
+            target_columns = [f"{column}_{value}" for value in values]
+            encoded_column = pd.get_dummies(df[column], columns=[column])
+            encoded_column = encoded_column.reindex(columns=target_columns, fill_value=0)
+            df = pd.concat([df, encoded_column], axis=1)
+            df = df.drop(columns=[column])
+        return df
 
 
 def transform_host_since(df):
@@ -252,7 +325,7 @@ def transform_percentage_to_number(df):
     return df
 
 
-def normalize_numerical_columns(df):
+def normalize_numerical_columns(df, scaler_file, load=False):
     """Standardize numerical columns to have mean 0 and std 1"""
 
     numerical_columns = [
@@ -273,17 +346,26 @@ def normalize_numerical_columns(df):
         "calculated_host_listings_count_shared_rooms",
         "price",
         # "avg_rating",
-        "avg_rating_by_host",
+        # "avg_rating_by_host",
     ]
-    scaler = StandardScaler()
 
-    for c in numerical_columns:
-        df[c] = scaler.fit_transform(df[[c]])
+    if not load:  # Create a new one and save to file
+        scaler = StandardScaler()
+        scaler.fit(df[numerical_columns])
 
+        with open(scaler_file, "wb") as file:
+            pickle.dump(scaler, file)
+    else:
+        # Load the scaler from file
+        with open(scaler_file, "rb") as file:
+            scaler: StandardScaler = pickle.load(file)
+
+    df[numerical_columns] = scaler.transform(df[numerical_columns])
     return df
 
 
-def transform_listings(df):
+def transform_listings(df, scaler_file):
+    """For transforming dataframe containing the entire dataset"""
     df = drop_useless_columns(df)
     df = drop_fulltext_columns(df)
     df = transform_binary_columns(df)
@@ -298,15 +380,35 @@ def transform_listings(df):
     df = transform_host_since(df)
     df = transform_percentage_to_number(df)
     df = one_hot_encode_list_column(df, "host_verifications")
-    df = add_average_rating_by_host(df)
+    # df = add_average_rating_by_host(df)
     df = df.drop(columns=["host_id"])  # after adding avg_rating_by_host
-    df = normalize_numerical_columns(df)
+    df = normalize_numerical_columns(df, scaler_file, load=False)
+    df = df.sort_index(axis=1)  # sort columns to have a consistent order
     return df
 
 
+def transform_item(df, scaler_file):
+    """For transforming dataframe with a single item"""
+    df = drop_useless_columns(df, debug=False)
+    df = drop_fulltext_columns(df, debug=False)
+    df = transform_binary_columns(df, debug=False)
+    df = transform_price(df)
+    df = transform_host_response_time(df)
+    df = extract_is_shared_from_bathrooms_text(df)
+    df = group_property_types(df)
+    df = categorical_columns_one_hot_encoding(df, debug=False)
+    df = transform_host_since(df)
+    df = transform_percentage_to_number(df)
+    df = transform_host_verifications(df)
+    #...
+    df = df.drop(columns=["host_id"])
+    df = df.sort_index(axis=1)
+    df = normalize_numerical_columns(df, scaler_file, load=True)
+    return df
+
 def main():
     listings = pd.read_csv(LISTINGS_FILE)
-    listings = transform_listings(listings)
+    listings = transform_listings(listings, SCALER_FILE)
     listings.to_csv(PROCESSED_LISTINGS_FILE, index=False)
 
 
