@@ -72,3 +72,5 @@ Uruchomienie testów:
 ```bash
 pdm run test
 ```
+
+Schemat API jest dostępny pod adresem http://127.0.0.1:8000/docs
