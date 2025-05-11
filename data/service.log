@@ -1,0 +1,49 @@
+backend-1  | 
+backend-1  |    FastAPI   Starting production server 🚀
+backend-1  |  
+backend-1  |              Searching for package file structure from directories with         
+backend-1  |              __init__.py files                                                  
+backend-1  |              Importing from /app
+backend-1  |  
+backend-1  |     module   📁 src            
+backend-1  |              ├── 🐍 __init__.py
+backend-1  |              └── 🐍 app.py     
+backend-1  |  
+backend-1  |       code   Importing the FastAPI app object from the module with the following
+backend-1  |              code:                                                              
+backend-1  |  
+backend-1  |              from src.app import app
+backend-1  |  
+backend-1  |        app   Using import string: src.app:app
+backend-1  |  
+backend-1  |     server   Server started at http://0.0.0.0:8000
+backend-1  |     server   Documentation at http://0.0.0.0:8000/docs
+backend-1  |  
+backend-1  |              Logs:
+backend-1  |  
+backend-1  |       INFO   Started server process [13]
+backend-1  | [2025-05-11 18:15:03,669] uvicorn.error | INFO | Started server process [13]
+backend-1  |       INFO   Waiting for application startup.
+backend-1  | [2025-05-11 18:15:03,670] uvicorn.error | INFO | Waiting for application startup.
+backend-1  |       INFO   Application startup complete.
+backend-1  | [2025-05-11 18:15:03,672] uvicorn.error | INFO | Application startup complete.
+backend-1  |       INFO   Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+backend-1  | [2025-05-11 18:15:03,675] uvicorn.error | INFO | Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+backend-1  | [2025-05-11 18:15:11,735] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529b, given listing 1047164111839138424, using model RandomBaseModel: 4.601391568632587
+backend-1  |       INFO   172.18.0.1:60906 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:15:17,266] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529e, given listing 1047164111839138424, using model LinearRegressionModel: 4.794981703732043
+backend-1  |       INFO   172.18.0.1:60912 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:15:25,119] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529e, given listing 1047164111839138424, using model LinearRegressionModel: 4.794981703732043
+backend-1  |       INFO   172.18.0.1:44050 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:15:27,991] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529b, given listing 1047164111839138424, using model RandomBaseModel: 4.757358068520032
+backend-1  |       INFO   172.18.0.1:44056 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:15:59,404] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529b, given listing 1047164111839138424, using model RandomBaseModel: 4.496196172096129
+backend-1  |       INFO   172.18.0.1:37262 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:16:00,545] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529b, given listing 1047164111839138424, using model RandomBaseModel: 4.974893206126437
+backend-1  |       INFO   172.18.0.1:37268 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:16:01,357] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529b, given listing 1047164111839138424, using model RandomBaseModel: 4.964942448130598
+backend-1  |       INFO   172.18.0.1:37278 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:16:03,452] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529e, given listing 1047164111839138424, using model LinearRegressionModel: 4.794981703732043
+backend-1  |       INFO   172.18.0.1:37282 - "POST /predict/ HTTP/1.1" 200
+backend-1  | [2025-05-11 18:16:04,135] PredictionService | INFO | Prediction for user 617d32dc-5c87-4ac6-a89d-b991624c529e, given listing 1047164111839138424, using model LinearRegressionModel: 4.794981703732043
+backend-1  |       INFO   172.18.0.1:37294 - "POST /predict/ HTTP/1.1" 200
