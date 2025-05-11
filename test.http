@@ -1,0 +1,76 @@
+### Example request
+POST http://localhost:8000/test-predict/
+Content-Type: application/json
+
+{
+    "x1": 1,
+    "x2": 2,
+    "x3": 3
+}
+
+###
+POST http://localhost:8000/predict/
+Content-Type: application/json
+
+{
+    "user_id": "617d32dc-5c87-4ac6-a89d-b991624c529b",
+    "data": {
+        "host_since": 2.0,
+        "host_response_time": 1.0,
+        "host_response_rate": 1.0,
+        "host_acceptance_rate": 1.0,
+        "host_is_superhost": 1,
+        "host_listings_count": 1.0,
+        "host_total_listings_count": 1.0,
+        "host_has_profile_pic": 1,
+        "host_identity_verified": 1,
+        "accommodates": 2,
+        "bathrooms": 1.0,
+        "bedrooms": 1.0,
+        "beds": 1.0,
+        "price": -0.2594334295484629,
+        "minimum_nights": 1,
+        "maximum_nights": -1.1218374201521064,
+        "minimum_minimum_nights": -0.7191153169085058,
+        "maximum_minimum_nights": -0.6739242118976496,
+        "minimum_maximum_nights": 0.8777412484163125,
+        "maximum_maximum_nights": 0.8390011262283527,
+        "minimum_nights_avg_ntm": -0.7324404898740915,
+        "maximum_nights_avg_ntm": 0.8594238393349247,
+        "has_availability": 1,
+        "availability_30": 1.077487209309022,
+        "availability_60": 1.0855839622824128,
+        "availability_90": 1.100749431350451,
+        "availability_365": -0.4278637247688957,
+        "instant_bookable": 1,
+        "calculated_host_listings_count": -0.22858555142385306,
+        "calculated_host_listings_count_entire_homes": -0.2271583105179928,
+        "calculated_host_listings_count_private_rooms": 0.017947419488071374,
+        "calculated_host_listings_count_shared_rooms": -0.05955985391486897,
+        "neighbourhood_group_cleansed_Friedrichshain-Kreuzberg": false,
+        "neighbourhood_group_cleansed_Lichtenberg": false,
+        "neighbourhood_group_cleansed_Marzahn - Hellersdorf": false,
+        "neighbourhood_group_cleansed_Mitte": false,
+        "neighbourhood_group_cleansed_Neukölln": true,
+        "neighbourhood_group_cleansed_Pankow": false,
+        "neighbourhood_group_cleansed_Reinickendorf": false,
+        "neighbourhood_group_cleansed_Spandau": false,
+        "neighbourhood_group_cleansed_Steglitz - Zehlendorf": false,
+        "neighbourhood_group_cleansed_Tempelhof - Schöneberg": false,
+        "neighbourhood_group_cleansed_Treptow - Köpenick": false,
+        "property_type_condo": false,
+        "property_type_entire rental unit": false,
+        "property_type_home": false,
+        "property_type_other": false,
+        "property_type_room": true,
+        "room_type_Hotel room": false,
+        "room_type_Private room": true,
+        "room_type_Shared room": false,
+        "is_shared_bathroom_1.0": true,
+        "host_verifications_email": true,
+        "host_verifications_": false,
+        "host_verifications_phone": true,
+        "host_verifications_work_email": false,
+        "avg_rating_by_host": 0.5103106227006139
+    }
+}
