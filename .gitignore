@@ -1,7 +1,10 @@
 .vscode
 .idea
 .venv
-data
+
+data/processed
+data/raw
+
 pyrightconfig.json
 **/__pycache__/
 .pdm-python
