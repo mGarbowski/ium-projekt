@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from listings_preprocessing import transform_item
 
 SCALER_FILE = 'models/scaler.pkl'
+LR_MODEL_FILE = 'models/linear_regression.pkl'
 
 
 class PredictRequest(BaseModel):
@@ -15,17 +16,10 @@ class PredictRequest(BaseModel):
     data: Dict[str, Union[float, int, bool, str]] = Field(..., description="Features for prediction")
 
 
-app = FastAPI()
-
-# Load the model
-with open('models/linear_regression.pkl', 'rb') as file:
+with open(LR_MODEL_FILE, 'rb') as file:
     model = pickle.load(file)
 
-
-@app.post("/test-predict/")
-def test_predict(features: dict):
-    print(features)
-    return {"message": "Test prediction endpoint hit!", "features": features}
+app = FastAPI()
 
 
 @app.post("/predict/")
@@ -34,6 +28,6 @@ def predict(request: PredictRequest):
     features = request.data
     features_df = pd.DataFrame([features])
     features_df = transform_item(features_df, SCALER_FILE)
-    prediction = model.predict(features_df)
+    prediction = model.predict(features_df)[0]
     print(f"Prediction for user {user_id}: {prediction}")
-    return {"prediction": prediction.tolist()}
+    return {"predicted_avg_rating": prediction}
