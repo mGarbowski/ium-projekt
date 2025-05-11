@@ -1,3 +1,7 @@
+"""Script for preprocessing training dataset and utilities for transforming new listings."""
+
+from __future__ import annotations
+
 import pickle
 from datetime import datetime
 
@@ -5,9 +9,12 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+from src.schema import Listing
+
 LISTINGS_FILE = "data/raw/listings.csv"
 PROCESSED_LISTINGS_FILE = "data/processed/listings.csv"
 SCALER_FILE = "models/scaler.pkl"
+
 
 def drop_useless_columns(df, debug=True):
     cols_to_drop = [
@@ -148,6 +155,7 @@ def one_hot_encode_list_column(df, column_name):
         )
     df.drop(columns=[column_name], inplace=True)
     return df
+
 
 def transform_host_verifications(df):
     """Explicit instead of one_hot_encode_list_column"""
@@ -400,11 +408,12 @@ def transform_item(df, scaler_file):
     df = transform_host_since(df)
     df = transform_percentage_to_number(df)
     df = transform_host_verifications(df)
-    #...
+    # ...
     df = df.drop(columns=["host_id"])
     df = df.sort_index(axis=1)
     df = normalize_numerical_columns(df, scaler_file, load=True)
     return df
+
 
 def main():
     listings = pd.read_csv(LISTINGS_FILE)
@@ -414,3 +423,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+class ListingTransformer:
+    def __init__(self, scaler_file: str):
+        self.scaler_file = scaler_file
+
+    def transform(self, listing: Listing) -> pd.DataFrame:
+        df = self.convert_to_dataframe(listing)
+        return transform_item(df, self.scaler_file)
+
+    def convert_to_dataframe(self, listing: Listing) -> pd.DataFrame:
+        """Convert a Listing object to a DataFrame."""
+        return pd.DataFrame([listing.model_dump()])
