@@ -1,0 +1,30 @@
+[project]
+name = "ium-projekt"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Mikołaj Garbowski", email = "mikolaj.garbowski.stud@pw.edu.pl"},
+    {name = "Maksym Bieńkowski", email = "maksym.bienkowski.stud@pw.edu.pl"},
+]
+dependencies = ["fastapi[standard]>=0.115.12", "numpy>=2.2.5", "pandas>=2.2.3", "scikit-learn>=1.6.1", "scipy>=1.15.3"]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm.scripts]
+dev = "fastapi dev src/app.py"
+prod = "fastapi run src/app.py"
+test = "pytest"
+
+
+[tool.pdm]
+distribution = false
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.3",
+    "seaborn>=0.13.2",
+    "pytest>=8.3.5",
+    "httpx>=0.28.1",
+]
