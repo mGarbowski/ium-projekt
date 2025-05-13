@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import pickle
 from datetime import datetime
 
@@ -160,10 +161,12 @@ def one_hot_encode_list_column(df, column_name):
 def transform_host_verifications(df):
     """Explicit instead of one_hot_encode_list_column"""
     col_name = "host_verifications"
-    expected_values = ['', 'email', 'phone', 'work_email']
+    expected_values = ["", "email", "phone", "work_email"]
     row_values = attribute_value_to_list(df[col_name])
     for row_value in row_values:
-        assert row_value in expected_values, f"Unexpected value {row_value} in column {col_name}"
+        assert (
+            row_value in expected_values
+        ), f"Unexpected value {row_value} in column {col_name}"
 
     for expected_value in expected_values:
         df[f"{col_name}_{expected_value}"] = expected_value in row_values
@@ -231,6 +234,21 @@ def group_property_types(df):
     return df
 
 
+def extract_num_bathrooms(df):
+    def parse_bathroom(text):
+        text = str(text).lower()
+        match = re.search(r"(\d+\.?\d*)", text)
+        if match:
+            return float(match.group(1))
+        elif "half" in text:
+            return 0.5
+        else:
+            return None
+
+    df["num_bathrooms"] = df["bathrooms_text"].apply(parse_bathroom)
+    return df
+
+
 def extract_is_shared_from_bathrooms_text(df):
     """Extract is_shared from bathrooms_text column"""
     extract_is_shared = lambda txt: 1 if "shared" in txt.lower() else 0
@@ -245,18 +263,18 @@ def categorical_columns_one_hot_encoding(df, debug=True):
     """One-hot encode categorical columns"""
     categorical_columns = {
         "neighbourhood_group_cleansed": [
-            'Neukölln',
-            'Pankow',
-            'Tempelhof - Schöneberg',
-            'Mitte',
-            'Friedrichshain-Kreuzberg',
-            'Treptow - Köpenick',
-            'Lichtenberg',
-            'Reinickendorf',
-            'Charlottenburg-Wilm.',
-            'Steglitz - Zehlendorf',
-            'Marzahn - Hellersdorf',
-            'Spandau'
+            "Neukölln",
+            "Pankow",
+            "Tempelhof - Schöneberg",
+            "Mitte",
+            "Friedrichshain-Kreuzberg",
+            "Treptow - Köpenick",
+            "Lichtenberg",
+            "Reinickendorf",
+            "Charlottenburg-Wilm.",
+            "Steglitz - Zehlendorf",
+            "Marzahn - Hellersdorf",
+            "Spandau",
         ],
         "property_type": [
             "entire rental unit",
@@ -282,17 +300,22 @@ def categorical_columns_one_hot_encoding(df, debug=True):
             unique_vals_without_nan = [val for val in unique_vals if not pd.isna(val)]
             expected_values_without_nan = [val for val in values if not pd.isna(val)]
 
-            assert len(unique_vals_without_nan) == len(expected_values_without_nan), \
-                f"Column {column} has {len(unique_vals_without_nan)} unique values, expected {len(expected_values_without_nan)}"
-            assert set(unique_vals_without_nan) == set(expected_values_without_nan), \
-                f"Actual: {unique_vals_without_nan}, expected: {expected_values_without_nan}"
+            assert len(unique_vals_without_nan) == len(
+                expected_values_without_nan
+            ), f"Column {column} has {len(unique_vals_without_nan)} unique values, expected {len(expected_values_without_nan)}"
+            assert set(unique_vals_without_nan) == set(
+                expected_values_without_nan
+            ), f"Actual: {unique_vals_without_nan}, expected: {expected_values_without_nan}"
 
             # Check if NaN exists in both actual and expected values
-            assert (pd.isna(unique_vals).any() == pd.isna(values).any()), \
-                f"NaN presence mismatch in column {column}"
+            assert (
+                pd.isna(unique_vals).any() == pd.isna(values).any()
+            ), f"NaN presence mismatch in column {column}"
 
             if pd.isna(values).any():
-                df[column] = df[column].fillna("nan")  # ensure a separate column gets created for NaN values
+                df[column] = df[column].fillna(
+                    "nan"
+                )  # ensure a separate column gets created for NaN values
 
         df = pd.get_dummies(df, columns=list(categorical_columns.keys()))
         return df
@@ -300,7 +323,9 @@ def categorical_columns_one_hot_encoding(df, debug=True):
         for column, values in categorical_columns.items():
             target_columns = [f"{column}_{value}" for value in values]
             encoded_column = pd.get_dummies(df[column], columns=[column])
-            encoded_column = encoded_column.reindex(columns=target_columns, fill_value=0)
+            encoded_column = encoded_column.reindex(
+                columns=target_columns, fill_value=0
+            )
             df = pd.concat([df, encoded_column], axis=1)
             df = df.drop(columns=[column])
         return df
@@ -380,6 +405,7 @@ def transform_listings(df, scaler_file):
     df = aggregate_rating_columns(df)
     df = transform_price(df)
     df = transform_host_response_time(df)
+    df = extract_num_bathrooms(df)
     df = extract_is_shared_from_bathrooms_text(df)
     df = group_property_types(df)
     df = categorical_columns_one_hot_encoding(
@@ -402,6 +428,7 @@ def transform_item(df, scaler_file):
     df = transform_binary_columns(df, debug=False)
     df = transform_price(df)
     df = transform_host_response_time(df)
+    df = extract_num_bathrooms(df)
     df = extract_is_shared_from_bathrooms_text(df)
     df = group_property_types(df)
     df = categorical_columns_one_hot_encoding(df, debug=False)

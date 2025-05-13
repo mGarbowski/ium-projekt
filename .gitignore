@@ -8,3 +8,4 @@ data/raw
 pyrightconfig.json
 **/__pycache__/
 .pdm-python
+data
