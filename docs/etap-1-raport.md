@@ -54,7 +54,7 @@ oferty są słabo pozycjonowane przez silnik wyszukujący. Czy da się coś z ty
 
 ### Analityczne kryteria sukcesu
 
-* Błąd średniokwadratowy $MSE$ na zbiorze testowym 5? razy mniejszy niż dla losowego modelu bazowego
+* Błąd średniokwadratowy $MSE$ na zbiorze testowym 2 razy mniejszy niż dla losowego modelu bazowego
 
 ## Analiza danych
 
@@ -278,8 +278,8 @@ Wartości `t`/`f` zamieniamy na 0/1
     * `review_scores_value`
 * Brak w 23% wierszy
 * Rozkład normalny
-    * średnia $\mu = 4.77$
-    * odchylenie $\sigma = 0.27$
+    * średnia $\mu = 4.76$
+    * odchylenie $\sigma = 0.29$
     * obcięty w $5.0$
     * możemy wykorzystać rozkład tworząc losowy model bazowy
 
@@ -438,3 +438,106 @@ Możemy wyciągnąć unikalne wartości i zastosować one-hot encoding.
   znacznie niższy
 * Nie mamy zaskakująco dobrych atrybutów poza sztucznie utworzonym, potencjalnie ew.
   `calculated_host_listings_count_entire_homes`
+
+
+#### Format danych wejściowych do modelu
+
+Kolumny zestawu po wszystkich transformacjach:
+* 'host_since'
+* 'host_response_time'
+* 'host_response_rate'
+* 'host_acceptance_rate'
+* 'host_is_superhost'
+* 'host_listings_count'
+* 'host_total_listings_count'
+* 'host_has_profile_pic'
+* 'host_identity_verified'
+* 'accommodates'
+* 'bathrooms'
+* 'bedrooms'
+* 'beds'
+* 'price'
+* 'minimum_nights'
+* 'maximum_nights'
+* 'minimum_minimum_nights'
+* 'maximum_minimum_nights'
+* 'minimum_maximum_nights'
+* 'maximum_maximum_nights'
+* 'minimum_nights_avg_ntm'
+* 'maximum_nights_avg_ntm'
+* 'has_availability'
+* 'availability_30'
+* 'availability_60'
+* 'availability_90'
+* 'availability_365'
+* 'instant_bookable'
+* 'calculated_host_listings_count'
+* 'calculated_host_listings_count_entire_homes'
+* 'calculated_host_listings_count_private_rooms'
+* 'calculated_host_listings_count_shared_rooms'
+* 'avg_rating'
+* 'num_bathrooms'
+* 'neighbourhood_group_cleansed_Friedrichshain-Kreuzberg'
+* 'neighbourhood_group_cleansed_Lichtenberg'
+* 'neighbourhood_group_cleansed_Marzahn - Hellersdorf'
+* 'neighbourhood_group_cleansed_Mitte'
+* 'neighbourhood_group_cleansed_Neukölln'
+* 'neighbourhood_group_cleansed_Pankow'
+* 'neighbourhood_group_cleansed_Reinickendorf'
+* 'neighbourhood_group_cleansed_Spandau'
+* 'neighbourhood_group_cleansed_Steglitz - Zehlendorf'
+* 'neighbourhood_group_cleansed_Tempelhof - Schöneberg'
+* 'neighbourhood_group_cleansed_Treptow - Köpenick'
+* 'property_type_condo'
+* 'property_type_entire rental unit'
+* 'property_type_home'
+* 'property_type_other'
+* 'property_type_room'
+* 'room_type_Hotel room'
+* 'room_type_Private room'
+* 'room_type_Shared room'
+* 'is_shared_bathroom_1.0'
+* 'host_verifications_'
+* 'host_verifications_email'
+* 'host_verifications_phone'
+* 'host_verifications_work_email'
+
+Planujemy dokonać imputacji brakujących wartości przed wrzuceniem do modelu neuronowego - opisane eksperymenty dotyczą zestawu
+bez kolumn z brakami.
+
+TODO: czy kolumna avg_rating_by_host będzie zaciągana z bazy danych, czy nieuwzględniona
+
+#### Analiza rozkładów prawdopodobieństwa atrybutów
+Zestaw zawiera bardzo wiele atrybutów, analizujemy więc wybrane o najwyższej wartości wsp. korelacji/wzajemnej informacji.
+
+![Rozkład średniej oceny per host](images/avg_rating_by_host_plot.png)
+* bardzo podobny do docelowej kolumny - średnia 4.72, $\sigma$ 0.30
+
+
+![Rozkład liczby listingów per host](images/calculated_host_listings_count_plot.png)
+![Rozkład średniej oceny](images/calculated_hosts_listings_count_entire_homes_plot.png)
+![Rozkład średniej oceny](images/calculated_host_listings_count_private_rooms_plot.png)
+![Rozkład średniej oceny](images/availability_365_plot.png)
+![Rozkład średniej oceny](images/availability_90_plot.png)
+
+Wnioski:
+* większość hostów ma 1 listing - będziemy znali wartości `avg_rating_by_host` dla niewielu kolumn
+* pozostałe kolumny korelujące z docelową mają prawie jednopunktowe rozkłady z pojedynczymi odchyłami
+
+
+#### Wynik prostego modelu bazowego na zestawie danych, porównanie z modelem losowym
+
+Przeanalizowaliśmy wyniki modelu bazowego (rozkład $N(4.77, 0.27)$) i kilku stockowych modeli bez dostrajania parametrów (`notebooks/model.ipynb`):
+
+
+| Model              | Mean Squared Error | R-squared |
+|-------------------|--------------------|-----------|
+| Base model (Gauss)| *0.13*               | *-0.66*     |
+| Linear regression | 0.11               | 0.05      |
+| Random forest     | **0.07**               | 0.06      |
+| Ridge             | 0.11               | 0.05      |
+| Lasso             | 0.12               | 0.00     |
+| Gradient boosting | 0.11               | **0.09**      |
+| SVR (rhf)         | 0.11               | 0.06      |
+
+Na podstawie tego porównania stwierdziliśmy, że bezpieczniejsze jest obniżenie założonego przez nas progu dokładności do dwukrotności błędu modelu bazowego - pierwotnie bazował on na porównaniu z modelem losującym zgodnie z rozkładem $U([4, 5])$ (`notebooks/simple_model.ipynb`).
