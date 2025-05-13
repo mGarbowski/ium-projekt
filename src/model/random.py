@@ -18,7 +18,7 @@ class RandomPredictionModel(AvgRatingPredictionModel):
         self.upper = upper
 
     @override
-    def predict(self, listing: Listing) -> float:
+    def _do_predict(self, listing: Listing) -> float:
         a = (self.lower - self.mean) / self.std
         b = (self.upper - self.mean) / self.std
         return truncnorm.rvs(a, b, loc=self.mean, scale=self.std, size=1)[0]
