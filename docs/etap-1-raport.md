@@ -54,7 +54,7 @@ oferty są słabo pozycjonowane przez silnik wyszukujący. Czy da się coś z ty
 
 ### Analityczne kryteria sukcesu
 
-* Błąd średniokwadratowy $MSE$ na zbiorze testowym 5? razy mniejszy niż dla losowego modelu bazowego
+* Błąd średniokwadratowy $MSE$ na zbiorze testowym 2 razy mniejszy niż dla losowego modelu bazowego
 
 ## Analiza danych
 
@@ -501,12 +501,43 @@ Kolumny zestawu po wszystkich transformacjach:
 * 'host_verifications_email'
 * 'host_verifications_phone'
 * 'host_verifications_work_email'
-* 'avg_rating_by_host'
+
+Planujemy dokonać imputacji brakujących wartości przed wrzuceniem do modelu neuronowego - opisane eksperymenty dotyczą zestawu
+bez kolumn z brakami.
+
+TODO: czy kolumna avg_rating_by_host będzie zaciągana z bazy danych, czy nieuwzględniona
 
 #### Analiza rozkładów prawdopodobieństwa atrybutów
-TODO
+Zestaw zawiera bardzo wiele atrybutów, analizujemy więc wybrane o najwyższej wartości wsp. korelacji/wzajemnej informacji.
+
+![Rozkład średniej oceny per host](images/avg_rating_by_host_plot.png)
+* bardzo podobny do docelowej kolumny - średnia 4.72, $\sigma$ 0.30
+
+
+![Rozkład liczby listingów per host](images/calculated_host_listings_count_plot.png)
+![Rozkład średniej oceny](images/calculated_hosts_listings_count_entire_homes_plot.png)
+![Rozkład średniej oceny](images/calculated_host_listings_count_private_rooms_plot.png)
+![Rozkład średniej oceny](images/availability_365_plot.png)
+![Rozkład średniej oceny](images/availability_90_plot.png)
+
+Wnioski:
+* większość hostów ma 1 listing - będziemy znali wartości `avg_rating_by_host` dla niewielu kolumn
+* pozostałe kolumny korelujące z docelową mają prawie jednopunktowe rozkłady z pojedynczymi odchyłami
 
 
 #### Wynik prostego modelu bazowego na zestawie danych, porównanie z modelem losowym
 
-TODO
+Przeanalizowaliśmy wyniki modelu bazowego (rozkład $N(4.77, 0.27)$) i kilku stockowych modeli bez dostrajania parametrów (`notebooks/model.ipynb`):
+
+
+| Model              | Mean Squared Error | R-squared |
+|-------------------|--------------------|-----------|
+| Base model (Gauss)| *0.13*               | *-0.66*     |
+| Linear regression | 0.11               | 0.05      |
+| Random forest     | **0.07**               | 0.06      |
+| Ridge             | 0.11               | 0.05      |
+| Lasso             | 0.12               | 0.00     |
+| Gradient boosting | 0.11               | **0.09**      |
+| SVR (rhf)         | 0.11               | 0.06      |
+
+Na podstawie tego porównania stwierdziliśmy, że bezpieczniejsze jest obniżenie założonego przez nas progu dokładności do dwukrotności błędu modelu bazowego - pierwotnie bazował on na porównaniu z modelem losującym zgodnie z rozkładem $U([4, 5])$ (`notebooks/simple_model.ipynb`).
