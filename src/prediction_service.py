@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 from hashlib import md5
 
@@ -31,6 +32,6 @@ class PredictionService:
         model = self.select_model(user_id)
         prediction = model.predict(listing)
         self.logger.info(
-            f"Prediction for user {user_id}, given listing {listing.id}, using model {model.name()}: {prediction}"
+            f"Predicted {prediction} for user {user_id}, using model {model.name()}, given params: {json.dumps(listing.model_dump())} "
         )
         return prediction

@@ -17,7 +17,7 @@ class LinearRegressionModel(AvgRatingPredictionModel):
             self.model: LinearRegression = pickle.load(f)
 
     @override
-    def predict(self, listing: Listing) -> float:
+    def _do_predict(self, listing: Listing) -> float:
         listing_df = self.listing_transformer.transform(listing)
         return self.model.predict(listing_df)[0]
 
