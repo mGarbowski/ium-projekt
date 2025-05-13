@@ -39,3 +39,45 @@ to (analitycy mogą wnioskować o dostęp do tych informacji na potrzeby realiza
 * Etap 1 2025.04.25
 * Etap 2 2025.05.23
 * [Opis](./docs/Projekt_IUM25L.pdf)
+
+
+## Uruchomienie i instalacja
+
+Instalacja bibliotek i wirtualnego środowiska:
+
+```bash
+pdm install --dev
+```
+
+Uruchomienie aplikacji w trybie deweloperskim:
+
+```bash
+pdm run dev
+```
+
+Uruchomienie aplikacji w kontenerze Docker:
+
+```bash
+docker compose up --build -d
+```
+
+Zapisanie logów do pliku:
+
+```bash
+docker compose logs > data/service.log
+```
+
+Uruchomienie testów:
+
+```bash
+pdm run test
+```
+
+## API
+
+* Schemat API jest dostępny pod adresem http://127.0.0.1:8000/docs
+* API przyjmuje dane w formacie JSON
+  * takie atrybuty jak w listings.csv (surowym)
+  * poza atrybutami, które logicznie nie mogą się tam znaleźć (średnia ocena itp.)
+* Każdy request zawiera id użytkownika
+  * na jego podstawie dzielony jest ruch do testów A/B 
