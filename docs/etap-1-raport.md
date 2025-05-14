@@ -505,7 +505,6 @@ Kolumny zestawu po wszystkich transformacjach:
 Planujemy dokonać imputacji brakujących wartości przed wrzuceniem do modelu neuronowego - opisane eksperymenty dotyczą zestawu
 bez kolumn z brakami.
 
-TODO: czy kolumna avg_rating_by_host będzie zaciągana z bazy danych, czy nieuwzględniona
 
 #### Analiza rozkładów prawdopodobieństwa atrybutów
 Zestaw zawiera bardzo wiele atrybutów, analizujemy więc wybrane o najwyższej wartości wsp. korelacji/wzajemnej informacji.
