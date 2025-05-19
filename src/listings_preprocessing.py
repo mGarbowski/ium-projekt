@@ -1,7 +1,6 @@
 """Script for preprocessing training dataset and utilities for transforming new listings."""
 
 from __future__ import annotations
-
 import re
 import pickle
 from datetime import datetime
@@ -10,6 +9,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+from src.imputation import impute_missing_values
 from src.schema import Listing
 
 LISTINGS_FILE = "data/raw/listings.csv"
@@ -378,8 +378,6 @@ def normalize_numerical_columns(df, scaler_file, load=False):
         "calculated_host_listings_count_private_rooms",
         "calculated_host_listings_count_shared_rooms",
         "price",
-        # "avg_rating",
-        # "avg_rating_by_host",
     ]
 
     if not load:  # Create a new one and save to file
@@ -397,7 +395,7 @@ def normalize_numerical_columns(df, scaler_file, load=False):
     return df
 
 
-def transform_listings(df, scaler_file):
+def transform_listings(df, scaler_file, impute=False):
     """For transforming dataframe containing the entire dataset"""
     df = drop_useless_columns(df)
     df = drop_fulltext_columns(df)
@@ -418,10 +416,13 @@ def transform_listings(df, scaler_file):
     df = df.drop(columns=["host_id"])  # after adding avg_rating_by_host
     df = normalize_numerical_columns(df, scaler_file, load=False)
     df = df.sort_index(axis=1)  # sort columns to have a consistent order
+
+    if impute:
+        df = impute_missing_values(df, load=False)
     return df
 
 
-def transform_item(df, scaler_file):
+def transform_item(df, scaler_file, impute=False):
     """For transforming dataframe with a single item"""
     df = drop_useless_columns(df, debug=False)
     df = drop_fulltext_columns(df, debug=False)
@@ -438,6 +439,8 @@ def transform_item(df, scaler_file):
     df = df.drop(columns=["host_id"])
     df = df.sort_index(axis=1)
     df = normalize_numerical_columns(df, scaler_file, load=True)
+    if impute:
+        df = impute_missing_values(df, load=True)
     return df
 
 
