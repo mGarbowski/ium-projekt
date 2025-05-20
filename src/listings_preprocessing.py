@@ -107,6 +107,7 @@ def aggregate_rating_columns(df):
 
 def add_average_rating_by_host(df):
     """Add average rating by host"""
+    # FIXME this includes the record itself - predicted variable leaks to the training set
     df["avg_rating_by_host"] = df.groupby("host_id")["avg_rating"].transform("mean")
     return df
 
