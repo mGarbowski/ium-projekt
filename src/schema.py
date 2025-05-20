@@ -8,8 +8,6 @@ Number = Union[int, float]
 class Listing(BaseModel):  # TODO remove or make optional unused fields
     id: str
     listing_url: str
-    scrape_id: str
-    last_scraped: str
     source: str
     name: str
     description: Optional[str]
@@ -36,8 +34,8 @@ class Listing(BaseModel):  # TODO remove or make optional unused fields
     neighbourhood: Optional[str]
     neighbourhood_cleansed: str
     neighbourhood_group_cleansed: str
-    latitude: str
-    longitude: str
+    latitude: float
+    longitude: float
     property_type: str
     room_type: str
     accommodates: Number

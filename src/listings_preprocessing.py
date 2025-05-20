@@ -1,8 +1,9 @@
-"""Script for preprocessing training dataset and utilities for transforming new listings."""
+"""Utilities for transforming listings data."""
 
 from __future__ import annotations
-import re
+
 import pickle
+import re
 from datetime import datetime
 
 import numpy as np
@@ -12,10 +13,6 @@ from sklearn.preprocessing import StandardScaler
 from src.imputation import impute_missing_values
 from src.schema import Listing
 
-LISTINGS_FILE = "data/raw/listings.csv"
-PROCESSED_LISTINGS_FILE = "data/processed/listings.csv"
-SCALER_FILE = "models/scaler.pkl"
-IMPUTER_FILE = "models/imputer_pipeline.pkl"
 
 def drop_useless_columns(df, debug=True):
     cols_to_drop = [
@@ -107,6 +104,7 @@ def aggregate_rating_columns(df):
 
 def add_average_rating_by_host(df):
     """Add average rating by host"""
+    # FIXME this includes the record itself - predicted variable leaks to the training set
     df["avg_rating_by_host"] = df.groupby("host_id")["avg_rating"].transform("mean")
     return df
 
@@ -165,7 +163,7 @@ def transform_host_verifications(df):
     row_values = attribute_value_to_list(df[col_name])
     for row_value in row_values:
         assert (
-            row_value in expected_values
+                row_value in expected_values
         ), f"Unexpected value {row_value} in column {col_name}"
 
     for expected_value in expected_values:
@@ -309,7 +307,7 @@ def categorical_columns_one_hot_encoding(df, debug=True):
 
             # Check if NaN exists in both actual and expected values
             assert (
-                pd.isna(unique_vals).any() == pd.isna(values).any()
+                    pd.isna(unique_vals).any() == pd.isna(values).any()
             ), f"NaN presence mismatch in column {column}"
 
             if pd.isna(values).any():
@@ -394,13 +392,34 @@ def normalize_numerical_columns(df, scaler_file, load=False):
     df[numerical_columns] = scaler.transform(df[numerical_columns])
     return df
 
+def drop_rows_with_no_rating(df):
+    assert "avg_rating" in df.columns
+    df = df.dropna(subset=["avg_rating"])
+    return df
+
+
+def drop_cols_absent_in_api_requests(df):
+    columns_absent_in_api_requests = [
+        "last_scraped",
+        "scrape_id",
+        "calendar_updated",
+        "calendar_last_scraped",
+        "number_of_reviews",
+        "number_of_reviews_ltm",
+        "number_of_reviews_l30d",
+        "first_review",
+        "last_review",
+        "reviews_per_month",
+    ]
+    df = df.drop(columns=columns_absent_in_api_requests, errors="ignore")
+    return df
+
 
 def transform_listings(df, scaler_file, imputer_file, impute=False):
     """For transforming dataframe containing the entire dataset"""
     df = drop_useless_columns(df)
     df = drop_fulltext_columns(df)
     df = transform_binary_columns(df)
-    df = aggregate_rating_columns(df)
     df = transform_price(df)
     df = transform_host_response_time(df)
     df = extract_num_bathrooms(df)
@@ -442,16 +461,6 @@ def transform_item(df, scaler_file, imputer_file, impute=False):
     if impute:
         df = impute_missing_values(df, imputer_file, load=True)
     return df
-
-
-def main():
-    listings = pd.read_csv(LISTINGS_FILE)
-    listings = transform_listings(listings, SCALER_FILE, IMPUTER_FILE)
-    listings.to_csv(PROCESSED_LISTINGS_FILE, index=False)
-
-
-if __name__ == "__main__":
-    main()
 
 
 class ListingTransformer:
