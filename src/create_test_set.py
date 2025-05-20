@@ -6,6 +6,7 @@ from listings_preprocessing import aggregate_rating_columns
 LISTINGS_FILE = "../data/raw/listings.csv"
 TEST_SET_FILE = "../data/processed/test_set.csv"
 
+# TODO make the test set and train set disjoint
 
 def main():
     listings = pd.read_csv(LISTINGS_FILE)
@@ -13,6 +14,7 @@ def main():
 
     columns_absent_in_api_requests = [
         "last_scraped",
+        "scrape_id",
         "calendar_updated",
         "calendar_last_scraped",
         "number_of_reviews",
