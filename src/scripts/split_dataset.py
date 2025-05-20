@@ -9,6 +9,7 @@ Test set will be saved in 2 variants
 - for A/B testing - minimal processing, used for generating API requests
 """
 
+import argparse
 import numpy as np
 import pandas as pd
 
@@ -29,6 +30,15 @@ IMPUTER_FILE = "models/imputer_pipeline.pkl"
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Split and preprocess dataset.")
+    parser.add_argument(
+        "--impute",
+        action="store_true",
+        help="Set this flag to enable imputation in transform_listings.",
+        default=False,
+    )
+    args = parser.parse_args()
+
     test_ratio = 0.2
     listings = pd.read_csv(LISTINGS_FILE)
 
@@ -62,7 +72,9 @@ def main():
     print(f"Experiment set saved to {EXPERIMENT_SET_FILE}")
 
     # Process and save train and test sets
-    listings = transform_listings(listings, SCALER_FILE, IMPUTER_FILE, impute=False)
+    listings = transform_listings(
+        listings, SCALER_FILE, IMPUTER_FILE, impute=args.impute
+    )
 
     train_set = listings.iloc[train_indices]
     train_set.to_csv(TRAIN_SET_FILE, index=False)

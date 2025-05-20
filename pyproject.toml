@@ -17,6 +17,7 @@ dev = "fastapi dev src/app.py"
 prod = "fastapi run src/app.py"
 test = "pytest"
 split_dataset = "python -m src.scripts.split_dataset"
+split_dataset_impute = "python -m src.scripts.split_dataset --impute"
 mock_requests = "python -m src.scripts.mock_app_requests"
 
 
