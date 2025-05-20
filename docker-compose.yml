@@ -11,5 +11,4 @@ services:
       - SCALER_FILE=/models/scaler.pkl
       - LR_MODEL_FILE=/models/linear_regression.pkl
       - IMPUTATION_FILE=/models/imputer_pipeline.pkl
-      - NEURAL_NET_FILE=/models/nn.pth
-
+      - NEURAL_NET_FILE=/models/nn.pkl

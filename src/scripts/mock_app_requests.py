@@ -34,19 +34,25 @@ def make_request(listing, user_id):
     }
     response = requests.post(API_ENDPOINT, json=payload)
     if response.status_code != 200:
-        raise Exception(f"Request failed with status code {response.status_code} {response.json()}")
+        raise Exception(
+            f"Request failed with status code {response.status_code} {response.json()}"
+        )
 
 
 def main():
     df = pd.read_csv(EXPERIMENT_SET)
     df = df.drop(columns=["avg_rating"], errors="ignore")
 
-    print(f"Sending {len(df)} requests to the API endpoint {API_ENDPOINT} for random model")
+    print(
+        f"Sending {len(df)} requests to the API endpoint {API_ENDPOINT} for random model"
+    )
     for _, row in df.iterrows():
         listing = row_to_dict(row)
         make_request(listing, RANDOM_MODEL_UID)
 
-    print(f"Sending {len(df)} requests to the API endpoint {API_ENDPOINT} for real model")
+    print(
+        f"Sending {len(df)} requests to the API endpoint {API_ENDPOINT} for real model"
+    )
     for _, row in df.iterrows():
         listing = row_to_dict(row)
         make_request(listing, REAL_MODEL_UID)
