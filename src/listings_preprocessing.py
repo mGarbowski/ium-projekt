@@ -163,7 +163,7 @@ def transform_host_verifications(df):
     row_values = attribute_value_to_list(df[col_name])
     for row_value in row_values:
         assert (
-                row_value in expected_values
+            row_value in expected_values
         ), f"Unexpected value {row_value} in column {col_name}"
 
     for expected_value in expected_values:
@@ -307,7 +307,7 @@ def categorical_columns_one_hot_encoding(df, debug=True):
 
             # Check if NaN exists in both actual and expected values
             assert (
-                    pd.isna(unique_vals).any() == pd.isna(values).any()
+                pd.isna(unique_vals).any() == pd.isna(values).any()
             ), f"NaN presence mismatch in column {column}"
 
             if pd.isna(values).any():
@@ -391,6 +391,7 @@ def normalize_numerical_columns(df, scaler_file, load=False):
 
     df[numerical_columns] = scaler.transform(df[numerical_columns])
     return df
+
 
 def drop_rows_with_no_rating(df):
     assert "avg_rating" in df.columns
