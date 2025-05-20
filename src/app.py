@@ -14,6 +14,7 @@ import os
 
 SCALER_FILE = os.environ['SCALER_FILE'] if 'SCALER_FILE' in os.environ else 'models/scaler.pkl'
 LR_MODEL_FILE = os.environ['LR_MODEL_FILE'] if 'LR_MODEL_FILE' in os.environ else 'models/linear_regression.pkl'
+IMPUTATION_FILE = os.environ['IMPUTATION_FILE'] if 'IMPUTATION_FILE' in os.environ else 'models/imputer_pipeline.pkl'
 
 logging.basicConfig(
     level=logging.INFO,
@@ -21,7 +22,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("uvicorn")
 
-listing_transformer = ListingTransformer(SCALER_FILE)
+listing_transformer = ListingTransformer(SCALER_FILE, IMPUTATION_FILE)
 random_model = RandomPredictionModel(mean=4.77, std=0.27, lower=0.0, upper=5.0)
 linear_regression_model = LinearRegressionModel(LR_MODEL_FILE, listing_transformer)
 prediction_service = PredictionService(linear_regression_model, random_model)

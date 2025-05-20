@@ -505,7 +505,6 @@ Kolumny zestawu po wszystkich transformacjach:
 Planujemy dokonać imputacji brakujących wartości przed wrzuceniem do modelu neuronowego - opisane eksperymenty dotyczą zestawu
 bez kolumn z brakami.
 
-TODO: czy kolumna avg_rating_by_host będzie zaciągana z bazy danych, czy nieuwzględniona
 
 #### Analiza rozkładów prawdopodobieństwa atrybutów
 Zestaw zawiera bardzo wiele atrybutów, analizujemy więc wybrane o najwyższej wartości wsp. korelacji/wzajemnej informacji.
@@ -515,10 +514,10 @@ Zestaw zawiera bardzo wiele atrybutów, analizujemy więc wybrane o najwyższej 
 
 
 ![Rozkład liczby listingów per host](images/calculated_host_listings_count_plot.png)
-![Rozkład średniej oceny](images/calculated_hosts_listings_count_entire_homes_plot.png)
-![Rozkład średniej oceny](images/calculated_host_listings_count_private_rooms_plot.png)
-![Rozkład średniej oceny](images/availability_365_plot.png)
-![Rozkład średniej oceny](images/availability_90_plot.png)
+![Rozkład liczby ogłoszeń z całymi obiektami](images/calculated_hosts_listings_count_entire_homes_plot.png)
+![Rozkład liczby ogłoszeń z pokojami](images/calculated_host_listings_count_private_rooms_plot.png)
+![Rozkład dostępności na przestrzeni 365 dni](images/availability_365_plot.png)
+![Rozkład dostępności na przestrzeni 90 dni](images/availability_90_plot.png)
 
 Wnioski:
 * większość hostów ma 1 listing - będziemy znali wartości `avg_rating_by_host` dla niewielu kolumn
