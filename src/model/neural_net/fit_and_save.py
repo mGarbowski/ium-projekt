@@ -5,7 +5,8 @@ import torch
 from src.model.neural_net.network import NeuralNetworkAvgRatingRegressor
 from src.model.neural_net.sweep import get_data_loaders
 
-NEURAL_NET_MODEL_FILE = "models/nn.pth"
+NEURAL_NET_MODEL_FILE = "models/nn.pkl"
+NEURAL_NET_WEIGHTS_FILE = "models/nn_weights.pth"
 
 
 if __name__ == "__main__":
@@ -24,4 +25,5 @@ if __name__ == "__main__":
     epochs = 20
     train_set, val_set = get_data_loaders()
     regressor.fit(train_set, val_set, epochs=epochs)
-    torch.save(regressor.model.state_dict(), NEURAL_NET_MODEL_FILE)
+    torch.save(regressor.model.state_dict(), NEURAL_NET_WEIGHTS_FILE)
+    torch.save(regressor, NEURAL_NET_MODEL_FILE)

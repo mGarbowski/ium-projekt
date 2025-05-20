@@ -12,7 +12,9 @@ class NeuralNetPredictionModel(AvgRatingPredictionModel):
     def __init__(self, model_file: str, listing_transformer: ListingTransformer):
         self.listing_transformer = listing_transformer
         with open(model_file, "rb") as f:
-            self.model: NeuralNetworkAvgRatingRegressor = pickle.load(f)
+            self.model: NeuralNetworkAvgRatingRegressor = torch.load(
+                f, weights_only=False
+            )
 
     @override
     def _do_predict(self, listing: Listing) -> float:
