@@ -9,3 +9,4 @@ pyrightconfig.json
 **/__pycache__/
 .pdm-python
 data
+wandb
