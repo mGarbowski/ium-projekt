@@ -4,7 +4,9 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 
 
-def impute_missing_values(df: pd.DataFrame, imputer_file: str, load: bool = False) -> pd.DataFrame:
+def impute_missing_values(
+    df: pd.DataFrame, imputer_file: str, load: bool = False
+) -> pd.DataFrame:
     """Impute missing values in the dataframe using saved or new imputers"""
 
     def create_preprocessor(df_no_target: pd.DataFrame):

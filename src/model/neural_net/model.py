@@ -19,7 +19,9 @@ class NeuralNetPredictionModel(AvgRatingPredictionModel):
     @override
     def _do_predict(self, listing: Listing) -> float:
         transformed = self.listing_transformer.transform(listing)
-        prediction = self.model.predict(torch.tensor(transformed))
+        prediction = self.model.predict(
+            torch.tensor(transformed.values, dtype=torch.float32)
+        )
         return self.clamp(prediction.item())
 
     @override

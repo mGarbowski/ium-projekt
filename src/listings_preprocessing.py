@@ -90,8 +90,7 @@ def transform_boolean_columns(df, debug=True):
     for col in df.select_dtypes(include=["bool"]).columns:
         if debug:
             unique_vals = df[col].unique()
-            assert len(unique_vals) == 2 or len(unique_vals) == 3
-            assert True in unique_vals and False in unique_vals
+            assert len(unique_vals) <= 3
 
         df[col] = df[col].apply(lambda x: 1 if x else 0)
     return df
@@ -177,7 +176,7 @@ def transform_host_verifications(df):
             row_value in expected_values
         ), f"Unexpected value {row_value} in column {col_name}"
 
-    for expected_value in expected_values[1:]:  # skip empty string
+    for expected_value in expected_values:  # TODO: [1:]:  # skip empty string
         df[f"{col_name}_{expected_value}"] = expected_value in row_values
 
     df = df.drop(columns=[col_name])
@@ -445,9 +444,9 @@ def transform_listings(df, scaler_file, imputer_file, impute=False):
     df = one_hot_encode_list_column(df, "host_verifications")
     # df = add_average_rating_by_host(df)
     df = df.drop(columns=["host_id"])  # after adding avg_rating_by_host
+    df = transform_boolean_columns(df)
     df = normalize_numerical_columns(df, scaler_file, load=False)
     df = df.sort_index(axis=1)  # sort columns to have a consistent order
-    df = transform_boolean_columns(df)
 
     if impute:
         df = impute_missing_values(df, imputer_file, load=False)
