@@ -158,17 +158,17 @@ def create_sample_sweep_config():
 
 
 def get_dataset_from_csv(file_path: str):
-    data = pd.read_csv(file_path)
-    X = data.drop(columns=["avg_rating"])
-    Y = data["avg_rating"]
+    df = pd.read_csv(file_path)
+    X = df.drop(columns=["avg_rating"])
+    Y = df["avg_rating"]
     X = torch.tensor(X.values, dtype=torch.float32)
-    X = torch.tensor(Y.values, dtype=torch.float32)
+    Y = torch.tensor(Y.values, dtype=torch.float32)
     return data.TensorDataset(X, Y)
 
 
 def get_data_loaders():
     dataset = get_dataset_from_csv(TRAIN_SET_FILE)
-    train_dataset, val_dataset = data.random_split(dataset.dataset, [0.8, 0.2])
+    train_dataset, val_dataset = data.random_split(dataset, [0.8, 0.2])
     return (
         data.DataLoader(train_dataset, batch_size=32, shuffle=True),
         data.DataLoader(val_dataset, batch_size=32, shuffle=False),

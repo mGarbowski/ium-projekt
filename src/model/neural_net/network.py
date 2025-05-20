@@ -9,7 +9,7 @@ from src.model.neural_net.early_stopping import EarlyStopping
 class CustomNN(nn.Module):
     def __init__(
         self,
-        input_dim: int = 15,
+        input_dim: int = 62,
         hidden_layers: tuple[int, ...] = (64, 32),
         activation: nn.Module = nn.LeakyReLU(negative_slope=0.01),
         dropout_rate: float = 0.3,
@@ -60,7 +60,6 @@ class CustomNN(nn.Module):
 class NeuralNetworkAvgRatingRegressor:
     def __init__(
         self,
-        input_dim: int = 15,
         hidden_layers: tuple[int, ...] = (64, 32),
         activation: nn.Module = nn.LeakyReLU(negative_slope=0.01),
         loss_function: nn.Module = nn.MSELoss(),
@@ -77,7 +76,7 @@ class NeuralNetworkAvgRatingRegressor:
         )
 
         self.model = CustomNN(
-            input_dim=input_dim,
+            input_dim=62,
             hidden_layers=hidden_layers,
             activation=activation,
             dropout_rate=dropout_rate,
