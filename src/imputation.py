@@ -3,10 +3,8 @@ import pickle
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 
-IMPUTER_FILE = "models/imputer_pipeline.pkl"
 
-
-def impute_missing_values(df: pd.DataFrame, load: bool = False) -> pd.DataFrame:
+def impute_missing_values(df: pd.DataFrame, imputer_file: str, load: bool = False) -> pd.DataFrame:
     """Impute missing values in the dataframe using saved or new imputers"""
 
     def create_preprocessor(df_no_target: pd.DataFrame):
@@ -42,13 +40,13 @@ def impute_missing_values(df: pd.DataFrame, load: bool = False) -> pd.DataFrame:
     df_no_target = df.drop(columns=["avg_rating"], errors="ignore")
 
     if load:
-        with open(IMPUTER_FILE, "rb") as file:
+        with open(imputer_file, "rb") as file:
             preprocessor = pickle.load(file)
         columns = preprocessor.transformers_[0][2] + preprocessor.transformers_[1][2]
     else:
         preprocessor, columns = create_preprocessor(df_no_target)
         preprocessor.fit(df_no_target)
-        with open(IMPUTER_FILE, "wb") as file:
+        with open(imputer_file, "wb") as file:
             pickle.dump(preprocessor, file)
 
     # Impute and reconstruct DataFrame
@@ -65,6 +63,7 @@ def impute_missing_values(df: pd.DataFrame, load: bool = False) -> pd.DataFrame:
     assert imputed_df.shape[0] == df.shape[0], "Row count mismatch after imputation"
 
     # Add the target column back
-    imputed_df["avg_rating"] = df["avg_rating"]
+    if "avg_rating" in df.columns:
+        imputed_df["avg_rating"] = df["avg_rating"]
 
     return imputed_df
