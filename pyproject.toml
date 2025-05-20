@@ -12,9 +12,12 @@ readme = "README.md"
 license = {text = "MIT"}
 
 [tool.pdm.scripts]
+docker = "docker compose up -d --build"
 dev = "fastapi dev src/app.py"
 prod = "fastapi run src/app.py"
 test = "pytest"
+split_dataset = "python -m src.scripts.split_dataset"
+mock_requests = "python -m src.scripts.mock_app_requests"
 
 
 [tool.pdm]
