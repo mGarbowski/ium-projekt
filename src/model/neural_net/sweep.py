@@ -50,22 +50,12 @@ class WandbGridSearch:
             else:
                 activation = nn.ReLU()
 
-            if config.loss_function == "mse":
-                loss_function = nn.MSELoss()
-            elif config.loss_function == "mae":
-                loss_function = nn.L1Loss()
-            elif config.loss_function == "huber":
-                loss_function = nn.SmoothL1Loss()
-            else:
-                loss_function = nn.MSELoss()
-
             hidden_layers = tuple(map(int, config.hidden_layers.split(",")))
 
             model = NeuralNetworkAvgRatingRegressor(
-                input_dim=input_dim,
                 hidden_layers=hidden_layers,
                 activation=activation,
-                loss_function=loss_function,
+                loss_function=nn.MSELoss(),
                 learning_rate=config.learning_rate,
                 weight_decay=config.weight_decay,
                 dropout_rate=config.dropout_rate,
@@ -146,9 +136,9 @@ def create_sample_sweep_config():
             "negative_slope": {"values": [0.01, 0.1]},
             "learning_rate": {"values": [0.001, 0.01, 0.0001]},
             "weight_decay": {"values": [0, 0.0001, 0.001]},
-            "dropout_rate": {"values": [0, 0.2, 0.5]},
-            "use_batch_norm": {"values": [True, False]},
-            "loss_function": {"values": ["mse", "mae", "huber"]},
+            "dropout_rate": {"values": [0, 0.3, 0.5]},
+            "use_batch_norm": {"values": [True]},
+            "loss_function": {"values": ["mse"]},
             "early_stopping_patience": {"values": [5, 10, 15]},
             "early_stopping_delta": {"values": [0, 0.001]},
         },
@@ -185,7 +175,7 @@ if __name__ == "__main__":
         project_name="ium-projekt",
         sweep_config=sweep_config,
         data_loader_fn=get_data_loaders,
-        epochs=100,
+        epochs=30,
         device="cuda" if torch.cuda.is_available() else "cpu",
     )
 
