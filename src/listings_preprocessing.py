@@ -15,7 +15,7 @@ from src.schema import Listing
 LISTINGS_FILE = "data/raw/listings.csv"
 PROCESSED_LISTINGS_FILE = "data/processed/listings.csv"
 SCALER_FILE = "models/scaler.pkl"
-
+IMPUTER_FILE = "models/imputer_pipeline.pkl"
 
 def drop_useless_columns(df, debug=True):
     cols_to_drop = [
@@ -395,7 +395,7 @@ def normalize_numerical_columns(df, scaler_file, load=False):
     return df
 
 
-def transform_listings(df, scaler_file, impute=False):
+def transform_listings(df, scaler_file, imputer_file, impute=False):
     """For transforming dataframe containing the entire dataset"""
     df = drop_useless_columns(df)
     df = drop_fulltext_columns(df)
@@ -418,11 +418,11 @@ def transform_listings(df, scaler_file, impute=False):
     df = df.sort_index(axis=1)  # sort columns to have a consistent order
 
     if impute:
-        df = impute_missing_values(df, load=False)
+        df = impute_missing_values(df, imputer_file, load=False)
     return df
 
 
-def transform_item(df, scaler_file, impute=False):
+def transform_item(df, scaler_file, imputer_file, impute=False):
     """For transforming dataframe with a single item"""
     df = drop_useless_columns(df, debug=False)
     df = drop_fulltext_columns(df, debug=False)
@@ -440,13 +440,13 @@ def transform_item(df, scaler_file, impute=False):
     df = df.sort_index(axis=1)
     df = normalize_numerical_columns(df, scaler_file, load=True)
     if impute:
-        df = impute_missing_values(df, load=True)
+        df = impute_missing_values(df, imputer_file, load=True)
     return df
 
 
 def main():
     listings = pd.read_csv(LISTINGS_FILE)
-    listings = transform_listings(listings, SCALER_FILE)
+    listings = transform_listings(listings, SCALER_FILE, IMPUTER_FILE)
     listings.to_csv(PROCESSED_LISTINGS_FILE, index=False)
 
 
@@ -455,12 +455,13 @@ if __name__ == "__main__":
 
 
 class ListingTransformer:
-    def __init__(self, scaler_file: str):
+    def __init__(self, scaler_file: str, imputer_file: str):
         self.scaler_file = scaler_file
+        self.imputer_file = imputer_file
 
     def transform(self, listing: Listing) -> pd.DataFrame:
         df = self.convert_to_dataframe(listing)
-        return transform_item(df, self.scaler_file)
+        return transform_item(df, self.scaler_file, self.imputer_file, impute=True)
 
     def convert_to_dataframe(self, listing: Listing) -> pd.DataFrame:
         """Convert a Listing object to a DataFrame."""
