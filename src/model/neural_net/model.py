@@ -1,4 +1,3 @@
-import pickle
 import torch
 from typing import override
 from src.listings_preprocessing import ListingTransformer
