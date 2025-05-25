@@ -6,7 +6,7 @@ authors = [
     {name = "Mikołaj Garbowski", email = "mikolaj.garbowski.stud@pw.edu.pl"},
     {name = "Maksym Bieńkowski", email = "maksym.bienkowski.stud@pw.edu.pl"},
 ]
-dependencies = ["fastapi[standard]>=0.115.12", "numpy>=2.2.5", "pandas>=2.2.3", "scikit-learn>=1.6.1", "scipy>=1.15.3"]
+dependencies = ["fastapi[standard]>=0.115.12", "numpy>=2.2.5", "pandas>=2.2.3", "scikit-learn>=1.6.1", "scipy>=1.15.3", "torch>=2.7.0"]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
@@ -17,6 +17,7 @@ dev = "fastapi dev src/app.py"
 prod = "fastapi run src/app.py"
 test = "pytest"
 split_dataset = "python -m src.scripts.split_dataset"
+split_dataset_impute = "python -m src.scripts.split_dataset --impute"
 mock_requests = "python -m src.scripts.mock_app_requests"
 
 
@@ -30,4 +31,5 @@ dev = [
     "seaborn>=0.13.2",
     "pytest>=8.3.5",
     "httpx>=0.28.1",
+    "wandb>=0.19.11",
 ]
