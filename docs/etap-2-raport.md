@@ -33,6 +33,11 @@ Główne cechy modelu:
 
 W trakcie eksperymentów testowano różne liczby i rozmiary warstw, funkcje aktywacji, wartości learning rate, współczynniki dropoutu oraz obecność/nieobecność batch normalizacji. Ostatecznie wybrany model osiągnął stratę na zbiorze walidacyjnym na poziomie `0.06`, co stanowi poprawę względem lasu losowego, który osiągał wynik `0.07`.
 
+### Analityczne kryteria sukcesu
+
+* Przyjęliśmy kryterium - błąd średniokwadratowy $MSE$ na zbiorze testowym 2 razy mniejszy niż dla losowego modelu bazowego
+* Opracowany model osiągnął $MSE$ na poziomie `0.06`, a model bazowy `0.13`, co oznacza, że kryterium zostało spełnione.
+
 ---
 
 ## Testy A/B i ich wyniki
