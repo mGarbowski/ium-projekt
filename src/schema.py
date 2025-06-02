@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 Number = Union[int, float]
 
 
-class Listing(BaseModel):  # TODO remove or make optional unused fields
+class Listing(BaseModel):
     id: str
     listing_url: str
     source: str
