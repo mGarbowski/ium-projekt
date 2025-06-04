@@ -33,6 +33,12 @@ Główne cechy modelu:
 
 W trakcie eksperymentów testowano różne liczby i rozmiary warstw, funkcje aktywacji, wartości learning rate, współczynniki dropoutu oraz obecność/nieobecność batch normalizacji. Ostatecznie wybrany model osiągnął stratę na zbiorze walidacyjnym na poziomie `0.06`, co stanowi poprawę względem lasu losowego, który osiągał wynik `0.07`.
 
+### Analityczne kryteria sukcesu
+
+* Przyjęliśmy kryterium - błąd średniokwadratowy $MSE$ na zbiorze testowym 2 razy mniejszy niż dla losowego modelu bazowego.
+* Opracowany model osiągnął $MSE$ na poziomie `0.06`, a model bazowy `0.13`, co oznacza, że kryterium zostało spełnione.
+  * dokładniej opisane w [raporcie z etapu 1](./etap-1-raport.md)
+
 ---
 
 ## Testy A/B i ich wyniki
@@ -41,6 +47,8 @@ Testy A/B zrealizowano poprzez przypisywanie użytkowników do wariantów testow
 
 Dane logowane przez serwer zapisywane są do pliku, który następnie analizowany jest w notebooku `notebooks/analyze_logs.ipynb`. Tam również znajduje się porównanie skuteczności obu modeli.
 
+Eksperyment można dokładnie zreplikować, zarówno przy podziale zbioru danych na treningowy i testowym oraz przy generowaniu losowych predykcji jest możliwość ustalenia ziarna, co zapewnia powtarzalność wyników.
+
 ---
 
 ## Implementacja mikroserwisu
@@ -48,7 +56,7 @@ Dane logowane przez serwer zapisywane są do pliku, który następnie analizowan
 Mikroserwis został zrealizowany jako aplikacja FastAPI (`src/app.py`). Obsługuje on zapytania predykcyjne przy użyciu modułu `PredictionService`, który korzysta z instancji klasy `AvgRatingPredictionModel`.
 
 Zaimplementowano kilka wariantów modeli:
-- losowy,
+- losowy (z możliwością ustalenia ziarna),
 - regresji liniowej,
 - sieci neuronowej (model docelowy).
 

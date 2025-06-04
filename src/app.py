@@ -40,7 +40,7 @@ logging.basicConfig(
 logger = logging.getLogger("uvicorn")
 
 listing_transformer = ListingTransformer(SCALER_FILE, IMPUTATION_FILE)
-random_model = RandomPredictionModel(mean=4.77, std=0.27, lower=0.0, upper=5.0)
+random_model = RandomPredictionModel(mean=4.77, std=0.27, lower=0.0, upper=5.0, seed=42)
 linear_regression_model = LinearRegressionModel(LR_MODEL_FILE, listing_transformer)
 neural_net_model = NeuralNetPredictionModel(NEURAL_NET_FILE, listing_transformer)
 prediction_service = PredictionService(neural_net_model, random_model)
